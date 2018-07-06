@@ -90,7 +90,7 @@ $ sudo apt-get install r-base
 
 ### Install IRkernel
 
-[IRKernel][irkernel] lets you run R code in Jupyter notebooks. This is the best way to work with R code[^There may be some argument on this point, but it is silly and this statement is obviously correct.]. Installation instructions for IRKernel are [here][irkernel installation]. In short:
+[IRKernel][irkernel] lets you run R code in Jupyter notebooks. This is the best way to work with R code (this is a truth not yet universally acknowledged). Installation instructions for IRKernel are [here][irkernel installation]. In short:
 
 At a terminal prompt, start R:
 
