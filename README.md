@@ -1,10 +1,10 @@
 # The Big Mac index
 
-This repository contains the data behind _The Economist’s_ Big Mac index, and code that shows how we calculate it. To download the data, go to the [latest release][latest release], where you can download the index data in a CSV or Excel, or the code behind it.
+This repository contains the data behind _The Economist’s_ Big Mac index, and code that shows how we calculate it. To download the data, go to the [latest release][latest release], where you can download the index data in a CSV or Excel, or the [code behind it][notebook link].
 
 ## Source data
 
-Our source data come from several places. We get Big Mac prices from McDonald's directly and from reporting around the world. Exchange rates come from Reuters. GDP and population data used to calculate the Euro area averages comes from Eurostat; per-capita GDP data come from the IMF World Economic Outlook reports.
+Our source data are from several places. Big Mac prices are from McDonald’s directly and from reporting around the world; exchange rates are from Thomson Reuters; GDP and population data used to calculate the euro area averages are from Eurostat and GDP per person data are from the IMF World Economic Outlook reports.
 
 ## Output data
 
@@ -16,7 +16,7 @@ The script provides data in three files:
 
 Each file also contains the source data used to calculate it.
 
-## Calculating the Big Mac Index
+## Calculating the Big Mac index
 
 The code to calculate the index is provided in a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github.
 
