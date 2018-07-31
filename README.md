@@ -16,11 +16,37 @@ The script provides data in three files:
 
 Each file also contains the source data used to calculate it.
 
+#### Codebook
+
+This codebook largely applies to all three files. The exception is the variables suffixed "\_raw" or "\_adjusted"—these appear (with suffixes) in the "full" file but without suffixes in the respective ("raw" or "adjusted") files.
+
+| variable      | definition                                            | source                     |
+| ------------- | ----------------------------------------------------- | -------------------------- |
+| date          | Date of observation                                   |
+| iso_a3        | Three-character [ISO 3166-1 country code][iso 3166-1] |
+| currency_code | Three-character [ISO 4217 currency code][iso 4217]    |
+| name          | Country name                                          |
+| local_price   | Price of a Big Mac in the local currency              | McDonalds; _The Economist_ |
+| dollar_ex     | Local currency units per dollar                       | _Reuters_                  |
+| dollar_price  | Price of a Big Mac in dollars                         |
+| USD_raw       | Raw index, relative to the US dollar                  |
+| EUR_raw       | Raw index, relative to the Euro                       |
+| GBP_raw       | Raw index, relative to the British pound              |
+| JPY_raw       | Raw index, relative to the Japanese yen               |
+| CNY_raw       | Raw index, relative to the Chinese yuan               |
+| GDP_dollar    | GDP per person, in dollars                            | IMF                        |
+| adj_price     | GDP-adjusted price of a Big Mac, in dollars           |
+| USD_adjusted  | Adjusted index, relative to the US dollar             |
+| EUR_adjusted  | Adjusted index, relative to the Euro                  |
+| GBP_adjusted  | Adjusted index, relative to the British pound         |
+| JPY_adjusted  | Adjusted index, relative to the Japanese yen          |
+| CNY_adjusted  | Adjusted index, relative to the Chinese yuan          |
+
 ## Calculating the Big Mac index
 
-The code to calculate the index is provided in a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github.
+The code to calculate the index is provided as a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github.
 
-If you want to run our code, you’ll need to set up a few things:
+If you want to run the notebook, you’ll need to set up a few things:
 
 ### Install Python
 
@@ -103,12 +129,12 @@ $ R
 
 Congratulations, you can run R in Jupyter.
 
-### Install tidyverse, data.table, countrycode
+### Install tidyverse and data.table
 
-Finally, our R script uses a few R packages you’ll need to install. The [tidyverse][tidyverse] is a collection of useful packages for data science work in R. [Data.table][data.table] is a complicated but extremely useful alternative to R’s standard data frames for storing and manipulating data. countrycode is a simple function for converting between different systems for encoding countries. At the R prompt from above, run:
+Finally, our R script uses a few R packages you’ll need to install. The [tidyverse][tidyverse] is a collection of useful packages for data science work in R. [Data.table][data.table] is a complicated but extremely useful alternative to R’s standard data frames for storing and manipulating data. At the R prompt from above, run:
 
 ```
-> install.packages('tidyverse','data.table','countrycode')
+> install.packages('tidyverse','data.table')
 ```
 
 You’re all set.
@@ -118,12 +144,22 @@ You’re all set.
 Navigate to the repository on the command line, and run:
 
 ```
-jupyter notebook
+$ jupyter notebook
 ```
 
 You should see a browser window pop up on `http://localhost:8888`. Click on “Big Mac data generator” to launch the notebook.
 
 To run the notebook, you can run the code cell by cell by clicking on the first cell and using <kbd>shift</kbd>+<kbd>enter</kbd> to run each cell in turn. Or you can run the whole thing by clicking on the “Cell” menu and selecting “Run All”.
+
+### R script
+
+We also include the calculation as a bare R script (`data-generator.R`) if you just want to run the code, but this doesn't explain what the code does or walk you through it. To run this, you'll only need to install R, tidyverse, and data.table; once those are installed, you can just run
+
+```
+$ R data-generator.R
+```
+
+to calculate the index files. (The R script may generate numbers that are different at the last decimal place to those from the Python notebook—these differences are due to rounding errors and can be safely ignored.)
 
 [releases]: https://github.com/theeconomist/big-mac-data/releases
 [latest release]: https://github.com/theeconomist/big-mac-data/releases/latest
@@ -136,3 +172,5 @@ To run the notebook, you can run the code cell by cell by clicking on the first 
 [irkernel installation]: https://irkernel.github.io/installation/
 [tidyverse]: https://www.tidyverse.org/
 [data.table]: https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html
+[iso 3166-1]: https://www.iso.org/iso-3166-country-codes.html
+[iso 4217]: https://www.iso.org/iso-4217-currency-codes.html
