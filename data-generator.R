@@ -10,12 +10,12 @@ big_mac_countries = c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE', 'D
                       'QAT', 'ROU', 'EUZ')
 base_currencies = c('USD', 'EUR', 'GBP', 'JPY', 'CNY')
 
-big_mac_data = fread('./source-data/big-mac-source-data.csv', na.strings = '#N/A') %>%
-  .[!is.na(local_price)] %>%                    # remove lines where the local price is missing
-  .[,GDP_dollar := as.numeric(GDP_dollar)] %>%  # convert GDP to a number
-  .[order(date, name)]                          # sort by date and then by country name, for easy reading
-
-latest_date = big_mac_data$date %>% max
+big_mac_data = fread('./source-data/big-mac-source-data.csv', na.strings = '#N/A',
+                     # sort by date and then by country name, for easy reading;
+                     # index on currency_code for faster joining
+                     key = 'date,name', index = 'currency_code') %>%
+  # remove lines where the local price is missing
+  .[!is.na(local_price)]
 
 big_mac_data[, dollar_price := local_price / dollar_ex]
 
@@ -25,12 +25,12 @@ big_mac_index = big_mac_data[
 
 for(currency in base_currencies) {
   big_mac_index[
-    ,                           
+    ,
     (currency) := dollar_price / .SD[currency_code == currency]$dollar_price - 1,
     by=date
   ]
 }
-big_mac_index[, (base_currencies) := round(.SD, 3), .SDcols=base_currencies]
+big_mac_index[, (base_currencies) := lapply(.SD, round, 3L), .SDcols=base_currencies]
 
 fwrite(big_mac_index, './output-data/big-mac-raw-index.csv')
 
@@ -44,21 +44,21 @@ regression_countries = c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE',
                          'PRT', 'ESP', 'GRC', 'EST')
 big_mac_gdp_data = big_mac_gdp_data[iso_a3 %in% regression_countries]
 
-big_mac_gdp_data[,adj_price := lm(dollar_price ~ GDP_dollar) %>% predict,by=date]
+big_mac_gdp_data[,adj_price := lm(dollar_price ~ GDP_dollar)$fitted.values, by=date]
 
 big_mac_adj_index = big_mac_gdp_data[
-  !is.na(dollar_price) & iso_a3 %in% regression_countries & iso_a3 %in% big_mac_countries
+  !is.na(dollar_price) & iso_a3 %in% big_mac_countries
   ,.(date, iso_a3, currency_code, name, local_price, dollar_ex, dollar_price, GDP_dollar, adj_price)]
 
 for(currency in base_currencies) {
   big_mac_adj_index[
     ,
     (currency) := (dollar_price / adj_price) /
-      (.SD[currency_code == currency]$dollar_price / .SD[currency_code == currency]$adj_price ) - 1,
+      .SD[currency_code == currency, dollar_price / adj_price] - 1,
     by=date
   ]
 }
-big_mac_adj_index[, (base_currencies) := round(.SD, 3), .SDcols=base_currencies]
+big_mac_adj_index[, (base_currencies) := lapply(.SD, round, 3L), .SDcols=base_currencies]
 
 fwrite(big_mac_adj_index, './output-data/big-mac-adjusted-index.csv')
 
