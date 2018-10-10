@@ -1,5 +1,7 @@
 # The Big Mac index
 
+[![Binder](https://mybinder.org/badge.svg)](https://mybinder.org/v2/gh/TheEconomist/big-mac-data/master?filepath=big-mac-data%2FBig%20Mac%20data%20generator.ipynb)
+
 This repository contains the data behind _The Economist’s_ Big Mac index, and code that shows how we calculate it. To download the data, go to the [latest release][latest release], where you can download the index data in a CSV or Excel, or the [code behind it][notebook link].
 
 ## Source data
@@ -46,7 +48,9 @@ This codebook largely applies to all three files. The exception is the variables
 
 The code to calculate the index is provided as a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github.
 
-If you want to run the notebook, you’ll need to set up a few things:
+You can run the notebook without having to install anything on your local computer by using the free https://mybinder.org service. You can [launch the notebook](https://mybinder.org/v2/gh/TheEconomist/big-mac-data/master?filepath=big-mac-data%2FBig%20Mac%20data%20generator.ipynb) directly from your browser.
+
+If you want to run the notebook on your local computer, you’ll need to set up a few things:
 
 ### Install Python
 
