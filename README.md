@@ -151,6 +151,18 @@ You should see a browser window pop up on `http://localhost:8888`. Click on “B
 
 To run the notebook, you can run the code cell by cell by clicking on the first cell and using <kbd>shift</kbd>+<kbd>enter</kbd> to run each cell in turn. Or you can run the whole thing by clicking on the “Cell” menu and selecting “Run All”.
 
+### R Markdown
+
+We include an R Markdown file (`big-mac-data-generator.Rmd`) that &mdash; like the Jupyter notebook &mdash; includes an annotated walkthrough/explanation of the steps. You can run it with:
+
+```
+$ Rscript -e "rmarkdown::render('big-mac-data-generator.Rmd')"
+```
+
+which will generate a self-contained HTML file with the code and output, a `big-mac-data-generator.md` with the code and output, and a new directory with images that the `.md` version can reference (or you can use separately).
+
+You can also run it in RStudio interactively as an interactive notebook or "knit" it from within RStudio.
+
 ### R script
 
 We also include the calculation as a bare R script (`data-generator.R`) if you just want to run the code, but this doesn't explain what the code does or walk you through it. To run this, you'll only need to install R, tidyverse, and data.table; once those are installed, you can just run
@@ -170,6 +182,7 @@ The licences include only the data and the software authored by _The Economist_,
 [releases]: https://github.com/theeconomist/big-mac-data/releases
 [latest release]: https://github.com/theeconomist/big-mac-data/releases/latest
 [notebook link]: https://github.com/theeconomist/big-mac-data/blob/master/Big%20Mac%20data%20generator.ipynb
+[rmd link]: https://github.com/theeconomist/big-mac-data/blob/master/big-mac-data-generator.Rmd
 [homebrew]: https://brew.sh/
 [h2g2py install]: http://docs.python-guide.org/en/latest/starting/installation/
 [h2g2py windows install]: http://docs.python-guide.org/en/latest/starting/install3/win/#install3-windows

@@ -1,0 +1,231 @@
+---
+title: Calculating the Big Mac index
+autor: The Economist Newspaper
+output: 
+  html_document: 
+    self_contained: true
+    keep_md: true
+---
+```{r preflight, include=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(
+  message = FALSE,
+  warning = FALSE,
+  echo = TRUE,
+  collapse = TRUE
+)
+```
+This R script shows how _The Economist_ calculates its Big Mac index.
+
+We use the `tidyverse` and `data.table` packages for working with data generally.
+
+```{r libraries}
+library(tidyverse)
+library(data.table)
+```
+
+We only calculate the Big Mac index for certain countries, specifically these ones:
+
+```{r country-data}
+big_mac_countries <- c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE', 'DNK',
+                       'EGY', 'HKG', 'HUN', 'IDN', 'ISR', 'JPN', 'MYS', 'MEX', 'NZL',
+                       'NOR', 'PER', 'PHL', 'POL', 'RUS', 'SAU', 'SGP', 'ZAF', 'KOR',
+                       'SWE', 'CHE', 'TWN', 'THA', 'TUR', 'ARE', 'USA', 'COL', 'CRI',
+                       'PAK', 'LKA', 'UKR', 'URY', 'IND', 'VNM', 'GTM', 'HND', # Venezuela removed
+                       'NIC', 'AZE', 'BHR', 'HRV', 'JOR', 'KWT', 'LBN', 'MDA', 'OMN',
+                       'QAT', 'ROU', 'EUZ')
+```
+
+Our raw data sheet, compiled every six months, contains three sets of data: the local price of a Big Mac, the exchange rate of the local currency to the US dollar, and the GDP per person of the country (in US dollars). We have these data compiled into a single file already, so we can just load it:
+
+```{r big-mac-data}
+big_mac_data <- fread('./source-data/big-mac-source-data.csv', na.strings = '#N/A') %>%
+    .[!is.na(local_price)] %>%                    # remove lines where the local price is missing
+    .[,GDP_dollar := as.numeric(GDP_dollar)] %>%  # convert GDP to a number
+    .[order(date, name)]                          # sort by date and then by country name, for easy reading
+
+tail(big_mac_data)
+
+(latest_date <- big_mac_data$date %>% max)
+```
+
+### Converting to a uniform currency
+
+Our first step to calculate the index is to convert all of the prices to a uniform currency (we use the US dollar).
+
+```{r take-a-look}
+big_mac_data[, dollar_price := local_price / dollar_ex]
+
+tail(big_mac_data)
+```
+
+### Calculating the raw index
+
+Now that we've done this, we can pick out our five 'base' currencies: the US dollar (USD), Euro (EUR), British pound (GBP), Japanese yen (JPY), and Chinese yuan (CNY).
+
+```{r currencies}
+base_currencies <- c('USD', 'EUR', 'GBP', 'JPY', 'CNY')
+```
+
+Calculating the index is as simple as dividing the local price by the price in the base currency. We're using `data.table`'s grouping abilities to do this neatly.
+
+```{r index-calculation}
+big_mac_index <- big_mac_data[
+    !is.na(dollar_price) & iso_a3 %in% big_mac_countries
+    ,.(date, iso_a3, currency_code, name, local_price, dollar_ex, dollar_price)]
+
+for(currency in base_currencies) {
+    big_mac_index[
+        ,                           # we don't want a subset, so our first argument is blank
+        (currency) :=               # we'll add a new column named for the base set
+            dollar_price /          # we divide the dollar price in each row by
+                                    # the dollar price on the *base currency*'s row (.SD is a data.table
+            .SD[currency_code == currency]$dollar_price -        # that contains only the current group)
+            1,                      # one means parity (neither over- nor under-valued), so we subtract one
+                                    # to get an over/under-valuation value
+        by=date                     # and of course, we'll group these rows by date
+    ]
+}
+
+big_mac_index[, (base_currencies) := round(.SD, 3), .SDcols=base_currencies]
+
+tail(big_mac_index)
+```
+
+We can also see a basic plot, like so:
+
+```{r quick-visual-check}
+to_plot <- big_mac_index[date == latest_date]
+
+to_plot$name = factor(to_plot$name, levels=to_plot$name[order(to_plot$USD)])
+
+ggplot(to_plot[, over := USD > 0], aes(x=name, y=USD, color=over)) +
+    geom_hline(yintercept = 0) +
+    geom_linerange(aes(ymin=0, ymax=USD)) +
+    geom_point() +
+    coord_flip()
+```
+
+We've now calculated the index. We'll save it to a file.
+
+```{r save-data}
+fwrite(big_mac_index, './output-data/big-mac-raw-index.csv')
+```
+
+Lovely! We've got it. So what about that adjusted index?
+
+## Calculating the adjusted index
+
+While the Big Mac index is a refreshingly simple way of thinking about relative currency values, a common (and fair) objection to it is that burgers cannot be easily traded across borders. Given non-traded local inputs (rent and worker’s wages) one would expect Big Macs to be cheaper in poorer countries and dearer in wealthier ones.
+
+We'll start out by only picking the countries where we have GDP data.
+
+```{r select-countries}
+big_mac_gdp_data <- big_mac_data[GDP_dollar > 0]
+
+head(big_mac_gdp_data)
+```
+
+In order to correct for the problem, we'll use a linear regression of GDP vs Big Mac Price.
+
+We sometimes add or remove countries from the Big Mac index, but we want the list of countries on which we base the adjusted index to remain consistent. We use this list of countries to calculate the relationship between GDP and Big Mac price:
+
+```{r regress-setup}
+regression_countries <- c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE', 'DNK',
+                          'EGY', 'EUZ', 'HKG', 'HUN', 'IDN', 'ISR', 'JPN', 'MYS', 'MEX',
+                          'NZL', 'NOR', 'PER', 'PHL', 'POL', 'RUS', 'SAU', 'SGP', 'ZAF',
+                          'KOR', 'SWE', 'CHE', 'TWN', 'THA', 'TUR', 'USA', 'COL', 'PAK',
+                          'IND', 'AUT', 'BEL', 'NLD', 'FIN', 'FRA', 'DEU', 'IRL', 'ITA',
+                          'PRT', 'ESP', 'GRC', 'EST')
+
+big_mac_gdp_data <- big_mac_gdp_data[iso_a3 %in% regression_countries]
+
+head(big_mac_gdp_data)
+```
+
+Now that we have our consistent basket of "regression countries", we can run our regressions. We can see what that looks like:
+
+```{r run-country-regressions}
+ggplot(big_mac_gdp_data, aes(x=GDP_dollar, y=dollar_price)) +
+    facet_wrap(~date) +
+    geom_smooth(method = lm, color='tomato') +
+    geom_point(alpha=0.5)
+```
+
+We have to calculate the regressions separately for each date (ggplot did this for us above).
+
+```{r regress-by-date}
+big_mac_gdp_data[,adj_price := lm(dollar_price ~ GDP_dollar) %>% predict,by=date]
+
+tail(big_mac_gdp_data)
+```
+
+If we've done everything right, all the points we just generated should be on those lines from above...
+
+```{r quick-check-2}
+ggplot(big_mac_gdp_data, aes(x=GDP_dollar, y=dollar_price)) +
+    facet_wrap(~date) +
+    geom_smooth(method = lm, color='tomato') +
+    geom_linerange(aes(ymin=dollar_price, ymax=adj_price), color='royalblue', alpha=0.3) +
+    geom_point(alpha=0.1) +
+    geom_point(aes(y=adj_price), color='royalblue', alpha=0.5)
+```
+
+Yep, that's exactly what we wanted. So now that we've got these data, we can do almost the same thing as before.
+
+```{r adjusted-index-cals}
+big_mac_adj_index <- big_mac_gdp_data[
+    !is.na(dollar_price) & iso_a3 %in% regression_countries & iso_a3 %in% big_mac_countries
+    ,.(date, iso_a3, currency_code, name, local_price, dollar_ex, dollar_price, GDP_dollar, adj_price)]
+
+for(currency in base_currencies) {
+    big_mac_adj_index[
+        ,                           # we don't want a subset, so our first argument is blank
+        (currency) :=               # we'll add a new column named for the base set
+            (                       # we divide the dollar price by the adjusted price to get
+                dollar_price / adj_price  # the deviation from our expectation by
+            ) /
+                                    # the same figure from the *base currency*'s row
+            (
+                .SD[currency_code == currency]$dollar_price /
+                .SD[currency_code == currency]$adj_price
+            ) -
+            1,                      # one means parity (neither over- nor under-valued), so we subtract one
+                                    # to get an over/under-valuation value
+        by=date                     # and of course, we'll group these rows by date
+    ]
+}
+big_mac_adj_index[, (base_currencies) := round(.SD, 3), .SDcols=base_currencies]
+
+tail(big_mac_adj_index)
+```
+
+```{r vis}
+to_plot <- big_mac_adj_index[date == latest_date]
+to_plot$name <- factor(to_plot$name, levels=to_plot$name[order(to_plot$USD)])
+
+ggplot(to_plot[, over := USD > 0], aes(x=name, y=USD, color=over)) +
+    geom_hline(yintercept = 0) +
+    geom_linerange(aes(ymin=0, ymax=USD)) +
+    geom_point() +
+    coord_flip()
+```
+
+```{r save-adjusted}
+fwrite(big_mac_adj_index, './output-data/big-mac-adjusted-index.csv')
+```
+
+Also, for tidiness, we'll generate a consolidated file with both indices in one table.
+
+```{r consolidate}
+big_mac_full_index <- merge(big_mac_index, big_mac_adj_index,
+      by=c('date', 'iso_a3', 'currency_code', 'name', 'local_price', 'dollar_ex', 'dollar_price'),
+      suffixes=c('_raw', '_adjusted'),
+      all.x=TRUE
+     )
+
+tail(big_mac_full_index)
+```
+
+```{r final-save}
+fwrite(big_mac_full_index, './output-data/big-mac-full-index.csv')
+```
