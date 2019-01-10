@@ -134,7 +134,7 @@ Congratulations, you can run R in Jupyter.
 Finally, our R script uses a few R packages you’ll need to install. The [tidyverse][tidyverse] is a collection of useful packages for data science work in R. [Data.table][data.table] is a complicated but extremely useful alternative to R’s standard data frames for storing and manipulating data. At the R prompt from above, run:
 
 ```
-> install.packages('tidyverse','data.table')
+> install.packages(c('tidyverse','data.table'))
 ```
 
 You’re all set.
