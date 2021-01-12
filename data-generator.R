@@ -30,7 +30,7 @@ for(currency in base_currencies) {
     by=date
   ]
 }
-big_mac_index[, (base_currencies) := lapply(.SD, round, 3L), .SDcols=base_currencies]
+big_mac_index[, (base_currencies) := lapply(.SD, round, 5L), .SDcols=base_currencies]
 
 fwrite(big_mac_index, './output-data/big-mac-raw-index.csv')
 
@@ -42,7 +42,13 @@ regression_countries = c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE',
                          'KOR', 'SWE', 'CHE', 'TWN', 'THA', 'TUR', 'USA', 'COL', 'PAK',
                          'IND', 'AUT', 'BEL', 'NLD', 'FIN', 'FRA', 'DEU', 'IRL', 'ITA',
                          'PRT', 'ESP', 'GRC', 'EST')
-big_mac_gdp_data = big_mac_gdp_data[iso_a3 %in% regression_countries]
+# in 2021, we added a number of additional countries to the adjusted index
+regression_addons_2021 = c('ARE', 'CRI', 'LKA', 'UKR', 'URY', 'VNM', 'GTM', 'HND', 'NIC',
+                           'AZE', 'BHR', 'HRV', 'JOR', 'KWT', 'MDA', 'OMN', 'QAT', 'ROU',
+                           'SVK', 'SVN', 'LVA', 'LTU')
+big_mac_gdp_data = big_mac_gdp_data[iso_a3 %in% regression_countries |
+  (iso_a3 %in% regression_addons_2021 & date >= as.Date('2021-01-01'))
+]
 
 big_mac_gdp_data[,adj_price := lm(dollar_price ~ GDP_dollar)$fitted.values, by=date]
 
@@ -58,7 +64,7 @@ for(currency in base_currencies) {
     by=date
   ]
 }
-big_mac_adj_index[, (base_currencies) := lapply(.SD, round, 3L), .SDcols=base_currencies]
+big_mac_adj_index[, (base_currencies) := lapply(.SD, round, 5L), .SDcols=base_currencies]
 
 fwrite(big_mac_adj_index, './output-data/big-mac-adjusted-index.csv')
 

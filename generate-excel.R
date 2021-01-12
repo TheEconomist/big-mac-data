@@ -25,14 +25,14 @@ data = fread('./output-data/big-mac-full-index.csv') %>%
         yuan_adj_valuation = CNY_adjusted * 100
     ), by=date]
 
-dates = data$date %>% unique
+dates = data$date %>% unique %>% sort(., decreasing = T)
 
 wb = createWorkbook(type='xls')
 
-for(sheetDate in sort(dates, decreasing = T)) {
-    dateStr = sheetDate %>% strftime(format='%b%Y')
+for(sheetDate in seq_along(dates)) {
+    dateStr = dates[sheetDate] %>% strftime(format='%b%Y')
     sheet = createSheet(wb, sheetName = dateStr)
-    xlsx.addTable(wb, sheet, data[date == sheetDate, -1], row.names=FALSE, startCol=1)
+    xlsx.addTable(wb, sheet, data[date == dates[sheetDate], -1], row.names=FALSE, startCol=1)
 }
 
 saveWorkbook(wb, paste0('./output-data/big-mac-',max(dates),'.xls'))
