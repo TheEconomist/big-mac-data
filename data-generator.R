@@ -32,7 +32,7 @@ for(currency in base_currencies) {
 }
 big_mac_index[, (base_currencies) := lapply(.SD, round, 5L), .SDcols=base_currencies]
 
-fwrite(big_mac_index, './output-data/big-mac-raw-index.csv')
+fwrite(big_mac_index, './output-data/big-mac-raw-index-old.csv')
 
 big_mac_gdp_data = big_mac_data[GDP_dollar > 0]
 
@@ -66,7 +66,7 @@ for(currency in base_currencies) {
 }
 big_mac_adj_index[, (base_currencies) := lapply(.SD, round, 5L), .SDcols=base_currencies]
 
-fwrite(big_mac_adj_index, './output-data/big-mac-adjusted-index.csv')
+fwrite(big_mac_adj_index, './output-data/big-mac-adjusted-index-old.csv')
 
 big_mac_full_index = merge(big_mac_index, big_mac_adj_index,
   by=c('date', 'iso_a3', 'currency_code', 'name', 'local_price', 'dollar_ex', 'dollar_price'),
@@ -74,4 +74,4 @@ big_mac_full_index = merge(big_mac_index, big_mac_adj_index,
   all.x=TRUE
   )
 
-fwrite(big_mac_full_index, './output-data/big-mac-full-index.csv')
+fwrite(big_mac_full_index, './output-data/big-mac-full-index-old.csv')
