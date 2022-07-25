@@ -160,7 +160,7 @@ To run the notebook, you can run the code cell by cell by clicking on the first 
 We also include the calculation as a bare R script (`data-generator.R`) if you just want to run the code, but this doesn't explain what the code does or walk you through it. To run this, you'll only need to install R, tidyverse, and data.table; once those are installed, you can just run
 
 ```
-$ R data-generator.R
+$ R data-generator-v2.R
 ```
 
 to calculate the index files. (The R script may generate numbers that are different at the last decimal place to those from the Python notebook—these differences are due to rounding errors and can be safely ignored.)
