@@ -2,9 +2,13 @@
 
 This repository contains the data behind _The Economist’s_ Big Mac index, and code that shows how we calculate it. To download the data, go to the [latest release][latest release], where you can download the index data in a CSV or Excel, or the [code behind it][notebook link].
 
+## Methodology changes
+
+In July 2022 we updated the Big Mac index to use a McDonalds-provided price for the United States, instead of averaging the price from four major US cities. We also changed our methodology for how we calculate the GDP-adjusted index. Instead of using the IMF's calculation of purchasing-power parity, we adjust the GDP per person by the difference in each country's Big Mac prices. The full history of the GDP-adjusted series will now be updated whenever the IMF’s historical GDP series are updated, which means the GDP series for a given year may change slightly over time as the IMF refines its measurements. The previously published versions of both indices are available in the [releases](https://github.com/TheEconomist/big-mac-data/releases).
+
 ## Source data
 
-Our source data are from several places. Big Mac prices are from McDonald’s directly and from reporting around the world; exchange rates are from Thomson Reuters; GDP and population data used to calculate the euro area averages are from Eurostat and GDP per person data are from the IMF World Economic Outlook reports.
+Our source data are from several places. Big Mac prices are from McDonald’s directly and from reporting around the world; exchange rates are from Thomson Reuters (until January 2022) and Refinitiv Datastream (July 2022 on); GDP and population data used to calculate the euro area averages are from Eurostat and GDP per person data are from the IMF World Economic Outlook reports.
 
 ## Output data
 
