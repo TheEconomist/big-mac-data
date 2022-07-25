@@ -12,7 +12,7 @@ data = fread('./output-data/big-mac-full-index.csv') %>%
         dollar_ex,
         dollar_price,
         dollar_ppp = dollar_ex * dollar_price / .SD[currency_code == 'USD']$dollar_price,
-        GDP_dollar,
+        GDP_bigmac,
         dollar_valuation = USD_raw * 100,
         euro_valuation = EUR_raw * 100,
         sterling_valuation = GBP_raw * 100,
