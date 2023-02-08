@@ -10,9 +10,21 @@ big_mac_countries = c('ARG', 'AUS', 'BRA', 'GBR', 'CAN', 'CHL', 'CHN', 'CZE', 'D
                       'QAT', 'ROU', 'EUZ')
 
 big_mac_data = fread('./source-data/big-mac-source-data-v2.csv', na.strings = '#N/A') %>%
-    .[!is.na(local_price)] %>%                    # remove lines where the local price is missing
     .[,GDP_local := as.numeric(GDP_local)] %>%    # convert GDP to a number
-    .[order(date, name)]                          # sort by date and then by country name, for easy reading
+    # account for manual corrections--we get these occasionally
+    merge(
+        fread('./source-data/price-corrections.csv')[,.(date, iso_a3, local_price)], 
+        by=c('date', 'iso_a3'),
+        all.x=T
+    ) %>%
+    .[,`:=`(
+        local_price=ifelse(is.na(local_price.y), local_price.x, local_price.y),
+        local_price.x=NULL,
+        local_price.y=NULL
+    )] %>%
+    .[, local_price := ifelse(local_price == '-', NA, local_price) %>% as.numeric] %>%
+    .[!is.na(local_price)] %>%                    # remove lines where the local price is missing
+    .[order(date, name)]                         # sort by date and then by country name, for easy reading
 
 latest_date = big_mac_data$date %>% max
 
