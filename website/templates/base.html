@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Mac Index | Global Visualization</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    
+    <!-- Custom Global CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    
+    {% if css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/' + css + '.css') }}">
+    {% endif %}
+    
+    <!-- Chart.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg sticky-top glass">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="fas fa-hamburger me-2 text-accent"></i>BigMac Index
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation" style="background-color: var(--accent-gold);">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link {{ 'active' if request.path == '/' else '' }}" id="nav-home">Map View</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/charts" class="nav-link {{ 'active' if request.path == '/charts' else '' }}" id="nav-charts">Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/documentation" class="nav-link {{ 'active' if request.path == '/documentation' else '' }}" id="nav-docs">API Docs</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+{% block content %}
+    
+{% endblock %}
+
+<footer class="mt-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center text-md-start mb-4 mb-md-0">
+                <h4 class="text-accent mb-3">BigMac Index</h4>
+                <p class="small">Visualizing global economic disparities through the lens of a hamburger.</p>
+            </div>
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <div class="social-links">
+                    <a href="https://github.com/ahmedsamir46" target="_blank" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.linkedin.com/in/ahmedsamir45/" target="_blank" title="LinkedIn">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+           
+                </div>
+            </div>
+            <div class="col-md-4 text-center text-md-end">
+                <p class="mb-1 small">Data source: <a href="https://github.com/TheEconomist/big-mac-data" target="_blank">The Economist (Official GitHub)</a></p>
+                <p class="mb-0 small">&copy; 2026 Big Mac Index Visualization</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    
+    {% if js %}
+         <script src="{{ url_for('static', filename='js/' + js + '.js') }}"></script>
+    {% endif %}
+</body>
+</html>

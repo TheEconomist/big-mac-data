@@ -1,0 +1,86 @@
+#map {
+    height: 650px;
+    width: 100%;
+    transition: var(--transition);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.map-wrapper {
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border-radius: 1.5rem;
+    overflow: hidden;
+}
+
+.legend {
+    padding: 1.2rem;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-main);
+}
+
+.legend h6 {
+    font-weight: 700;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: var(--accent-gold);
+}
+
+.legend i {
+    width: 20px;
+    height: 20px;
+    float: left;
+    margin-right: 12px;
+    border-radius: 4px;
+    opacity: 0.9;
+}
+
+.country-detail {
+    margin-top: 3rem;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.error-message {
+    color: #ff6b6b;
+    font-weight: 600;
+}
+
+/* Custom Select Styling */
+select.form-select {
+    cursor: pointer;
+}
+
+select.form-select option {
+    background-color: var(--secondary-navy);
+    color: var(--text-main);
+}
+
+/* Leaflet Overrides */
+.leaflet-container {
+    background: #0a192f !important;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+    background-color: var(--secondary-navy) !important;
+    color: var(--text-main) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.leaflet-control-zoom-in, .leaflet-control-zoom-out {
+    background-color: var(--secondary-navy) !important;
+    color: var(--text-main) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}

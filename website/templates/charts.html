@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h1 class="hero-title">Economic Analysis</h1>
+        <p class="hero-subtitle mx-auto">Deep dive into pricing trends, historical data, and the correlation between local wealth and Big Mac affordability.</p>
+    </div>
+    
+    <div class="row g-4 mb-5">
+        <div class="col-12">
+            <div class="card glass border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="card-header glass-header border-bottom border-light border-opacity-10 p-4">
+                    <h3 class="mb-0 text-accent fw-bold"><i class="fas fa-chart-bar me-3"></i>Global Price Comparison (Top 10)</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container position-relative" style="height: 500px;">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row g-4 mb-5">
+        <div class="col-lg-7">
+            <div class="card glass border-0 rounded-4 shadow-lg h-100 overflow-hidden">
+                <div class="card-header glass-header border-bottom border-light border-opacity-10 p-4">
+                    <h3 class="mb-0 text-accent fw-bold"><i class="fas fa-chart-line me-3"></i>Historical Price Trends</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container position-relative" style="height: 400px;">
+                        <canvas id="lineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="card glass border-0 rounded-4 shadow-lg h-100 overflow-hidden">
+                <div class="card-header glass-header border-bottom border-light border-opacity-10 p-4">
+                    <h3 class="mb-0 text-accent fw-bold"><i class="fas fa-project-diagram me-3"></i>GDP vs Big Mac Price</h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="chart-container position-relative" style="height: 400px;">
+                        <canvas id="scatterChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
