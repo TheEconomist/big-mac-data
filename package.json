@@ -1,0 +1,12 @@
+{
+  "name": "big-mac-index-visualizer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Interactive browser visualizer for the Big Mac Index dataset",
+  "scripts": {
+    "start": "python3 -m http.server 8000",
+    "test": "npm run lint && node --check app.js",
+    "lint": "eslint app.js"
+  },
+  "license": "MIT"
+}

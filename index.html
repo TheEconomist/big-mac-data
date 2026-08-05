@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explore 25 years of The Economist's Big Mac Index.">
+  <title>Big Mac Index — Global Price Explorer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Big Mac Index home"><span class="brand-mark">BM</span><span>BIG MAC<br>INDEX</span></a>
+    <p class="edition">GLOBAL PRICE EXPLORER <span>2000—2025</span></p>
+    <a class="source-link" href="https://github.com/TheEconomist/big-mac-data" target="_blank" rel="noreferrer">VIEW SOURCE <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span></span> PURCHASING POWER, VISUALIZED</div>
+      <div class="hero-grid">
+        <h1>What does a burger<br><em>really</em> cost?</h1>
+        <p>The Big Mac Index turns a familiar product into a simple test of currency value. Explore how prices—and purchasing power—have shifted across the world.</p>
+      </div>
+    </section>
+
+    <section class="dashboard" aria-label="Interactive data explorer">
+      <div class="controls">
+        <div class="control-group wide">
+          <label for="countrySelect">COMPARE COUNTRIES</label>
+          <div id="countrySelect" class="country-picker" role="group" aria-label="Selected countries"></div>
+        </div>
+        <div class="control-group">
+          <label for="baseSelect">BASE CURRENCY</label>
+          <select id="baseSelect"><option value="USD">US dollar · USD</option><option value="EUR">Euro · EUR</option><option value="GBP">British pound · GBP</option><option value="JPY">Japanese yen · JPY</option><option value="CNY">Chinese yuan · CNY</option></select>
+        </div>
+        <div class="control-group">
+          <label>INDEX TYPE</label>
+          <div class="segmented"><button class="active" data-type="raw">RAW</button><button data-type="adjusted">GDP-ADJUSTED</button></div>
+        </div>
+      </div>
+
+      <div class="chart-heading">
+        <div><div class="mini-label">CURRENCY VALUATION OVER TIME</div><h2>Over or under?</h2></div>
+        <div class="legend-note"><span class="dash"></span> PARITY WITH <strong id="baseLabel">USD</strong></div>
+      </div>
+      <div id="legend" class="legend"></div>
+      <div class="chart-wrap">
+        <svg id="chart" role="img" aria-label="Line chart of Big Mac currency valuation over time"></svg>
+        <div id="tooltip" class="tooltip" hidden></div>
+      </div>
+      <div class="timeline-row"><span id="startDate">APR 2000</span><input id="dateSlider" type="range" min="0" value="0" aria-label="Choose observation date"><span id="endDate">JAN 2025</span></div>
+
+      <div class="snapshot-head"><div><div class="mini-label">MARKET SNAPSHOT</div><h2 id="snapshotDate">January 2025</h2></div><p>Relative to <strong id="snapshotBase">the US dollar</strong> <span class="info" title="Positive means overvalued; negative means undervalued.">i</span></p></div>
+      <div id="cards" class="cards"></div>
+    </section>
+
+    <section class="explain">
+      <div><div class="eyebrow"><span></span> HOW TO READ IT</div><h2>One burger.<br>One big idea.</h2></div>
+      <div class="explain-copy"><p>The index compares the local price of a Big Mac with its price in a base country after converting currencies. The gap offers an informal view of whether a currency may be over- or undervalued.</p><div class="formula"><span>LOCAL PRICE ÷ EXCHANGE RATE</span><b>vs.</b><span>BASE-COUNTRY PRICE</span></div></div>
+    </section>
+  </main>
+  <footer><div class="brand"><span class="brand-mark">BM</span><span>BIG MAC<br>INDEX</span></div><p>Data by <strong>The Economist</strong><br>Interactive explorer built from the open dataset.</p><p class="updated">LATEST OBSERVATION<br><strong id="latestDate">JANUARY 2025</strong></p></footer>
+  <script src="app.js"></script>
+</body>
+</html>

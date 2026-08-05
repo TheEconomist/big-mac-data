@@ -184,3 +184,22 @@ The licences include only the data and the software authored by _The Economist_,
 [data.table]: https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html
 [iso 3166-1]: https://www.iso.org/iso-3166-country-codes.html
 [iso 4217]: https://www.iso.org/iso-4217-currency-codes.html
+
+## Interactive visualizer
+
+This repository includes a browser-based explorer for comparing currency valuation over time, switching the base currency and index methodology, and inspecting a selected-date snapshot. It uses the committed `big-mac-full-index.csv` directly and has no build dependencies.
+
+From the repository root, install the project metadata and start a local server:
+
+```sh
+npm install
+npm start
+```
+
+Then open [http://localhost:8000](http://localhost:8000) in a browser.
+
+To lint the visualizer JavaScript, run:
+
+```sh
+npm run lint
+```
