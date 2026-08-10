@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5 pt-4">
+    <div class="text-center mb-5">
+        <h1 class="hero-title">API & Developer Guide</h1>
+        <p class="hero-subtitle mx-auto">Access the raw data powering our visualizations. We provide clean, structured endpoints for economic research and integration.</p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card glass border-0 rounded-4 shadow-lg p-4 h-100">
+                <h3 class="text-accent fw-bold mb-4"><i class="fas fa-layer-group me-3"></i>Data Schema</h3>
+                <p class="small text-muted">Our dataset originates from The Economist's Big Mac Index. Key fields include:</p>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><code class="text-accent">iso_a3</code><span class="text-white">: 3-letter country code</span></li>
+                    <li class="mb-2"><code class="text-accent">local_price</code><span class="text-white">: Price in local currency</span></li>
+                    <li class="mb-2"><code class="text-accent">dollar_ex</code><span class="text-white">: Exchange rate to USD</span></li>
+                    <li class="mb-2"><code class="text-accent">dollar_price</code><span class="text-white">: Price in USD</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card glass border-0 rounded-4 shadow-lg overflow-hidden">
+                <div class="card-header glass-header border-bottom border-light border-opacity-10 p-4">
+                    <h3 class="mb-0 text-accent fw-bold"><i class="fas fa-terminal me-3"></i>Endpoints</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="accordion accordion-flush" id="apiAccordion">
+                        
+                        <div class="accordion-item bg-transparent border-bottom border-light border-opacity-10">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white py-4" type="button" data-bs-toggle="collapse" data-bs-target="#ep-data">
+                                    <span class="badge bg-success me-3">GET</span> <code>/data</code>
+                                </button>
+                            </h2>
+                            <div id="ep-data" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body text-white">
+                                    Returns global pricing data for a specific date.
+                                    <div class="mt-2 bg-dark p-3 rounded-3">
+                                        <code class="text-accent">Query: ?date=YYYY-MM-DD</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item bg-transparent border-bottom border-light border-opacity-10">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white py-4" type="button" data-bs-toggle="collapse" data-bs-target="#ep-country">
+                                    <span class="badge bg-success me-3">GET</span> <code>/country/&lt;code&gt;</code>
+                                </button>
+                            </h2>
+                            <div id="ep-country" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body text-white">
+                                    Returns full historical timeline for a single country.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item bg-transparent">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed bg-transparent text-white py-4" type="button" data-bs-toggle="collapse" data-bs-target="#ep-charts">
+                                    <span class="badge bg-success me-3">GET</span> <code>/chart_data</code>
+                                </button>
+                            </h2>
+                            <div id="ep-charts" class="accordion-collapse collapse" data-bs-parent="#apiAccordion">
+                                <div class="accordion-body text-white">
+                                    Aggregated data designed for visualization components.
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .accordion-button::after {
+        filter: invert(1);
+    }
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(255, 255, 255, 0.05);
+        color: var(--accent-gold);
+    }
+</style>
+
+{% endblock %}

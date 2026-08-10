@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <!-- Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Global Purchasing Power</h1>
+            <p class="hero-subtitle mb-4">Explore economic disparities through the Big Mac Index. Compare currencies, track prices, and visualize global value.</p>
+            <div class="mt-4 pt-2">
+                <a href="#map-container" class="btn btn-primary-custom px-5 py-3 rounded-pill me-3 shadow-lg">EXPLORE MAP</a>
+                <a href="/charts" class="btn btn-outline-light px-5 py-3 rounded-pill border-opacity-25">VIEW ANALYSIS</a>
+            </div>
+        </div>
+    </header>
+
+    <div id="map-container" class="container mt-5 pt-4">
+        <div class="row g-4 mb-5 align-items-end justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="form-group">
+                    <label for="date-select" class="form-label text-accent fw-bold small mb-2 d-block">
+                        <i class="far fa-calendar-alt me-2"></i>SELECT PERIOD
+                    </label>
+                    <select id="date-select" class="form-select glass text-white border-0 py-3 px-4 shadow-sm"></select>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="form-group">
+                    <label for="country-select" class="form-label text-accent fw-bold small mb-2 d-block">
+                        <i class="fas fa-search-location me-2"></i>GO TO COUNTRY
+                    </label>
+                    <select id="country-select" class="form-select glass text-white border-0 py-3 px-4 shadow-sm">
+                        <option value="">-- Select a country --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-wrapper mb-5 position-relative">
+            <div id="map" class="rounded-4"></div>
+            <button id="reset-map" class="btn btn-sm btn-dark position-absolute top-0 start-0 m-3 z-index-1000 shadow border-0 py-2 px-3 rounded-3" title="Reset View" style="z-index: 1000;">
+                <i class="fas fa-expand me-2"></i>Reset
+            </button>
+        </div>
+        
+        <div id="error-message" class="alert alert-danger px-4 py-3 rounded-4 shadow-sm text-center mb-5" style="display: none;"></div>
+        
+        <div id="country-detail" class="country-detail mt-5" style="display: none;">
+            <div class="card glass border-0 rounded-4 overflow-hidden shadow-lg">
+                <div class="card-header p-4 glass-header border-bottom border-light border-opacity-10 d-flex justify-content-between align-items-center">
+                    <h2 id="country-name" class="mb-0 text-accent fw-bold h3"></h2>
+                    <span class="badge bg-gold text-dark px-3 py-2 rounded-pill" id="country-code-badge"></span>
+                </div>
+                <div class="card-body p-4 p-lg-5" id="country-info">
+                    <!-- Info will be injected here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
