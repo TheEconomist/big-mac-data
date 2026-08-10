@@ -48,7 +48,7 @@ This codebook largely applies to all three files. The exception is the variables
 
 ## Calculating the Big Mac index
 
-The code to calculate the index is provided as a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github.
+The code to calculate the index is provided as a [Jupyter Notebook][jupyter]. The code itself is written in R, a programming language designed for data manipulation and statistics. You can view the [notebook][notebook link] on github, or run it with [Binder](https://mybinder.org/v2/gh/TheEconomist/big-mac-data/master?filepath=Big%20Mac%20data%20generator.ipynb).
 
 If you want to run the notebook, you’ll need to set up a few things:
 
@@ -141,6 +141,12 @@ Finally, our R script uses a few R packages you’ll need to install. The [tidyv
 > install.packages(c('tidyverse','data.table'))
 ```
 
+or
+
+```
+> source('install.R')
+```
+
 You’re all set.
 
 ### Start the notebook
@@ -164,6 +170,14 @@ $ R data-generator-v2.R
 ```
 
 to calculate the index files. (The R script may generate numbers that are different at the last decimal place to those from the Python notebook—these differences are due to rounding errors and can be safely ignored.)
+
+### Run online
+
+The notebooks can also be run online, with no install, using [Binder](https://mybinder.org/).
+
+Jupyter+R: [![Binder](http://mybinder.org/badge.svg)](http://beta.mybinder.org/v2/gh/TheEconomist/big-mac-data/master)
+
+RStudio: [![Binder](http://mybinder.org/badge.svg)](http://beta.mybinder.org/v2/gh/TheEconomist/big-mac-data/master?urlpath=rstudio)
 
 ### Licence
 
